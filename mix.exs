@@ -20,7 +20,7 @@ defmodule Theshellter.MixProject do
   def application do
     [
       mod: {Theshellter.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :edeliver]
     ]
   end
 
@@ -49,7 +49,9 @@ defmodule Theshellter.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:ueberauth, "~> 0.6"},
       {:ueberauth_github, "~> 0.8.0"},
-      {:guardian, "~> 2.1"}
+      {:guardian, "~> 2.1"},
+      {:edeliver, "~> 1.8.0"},
+      {:distillery, "~> 2.1.1"}
     ]
   end
 
