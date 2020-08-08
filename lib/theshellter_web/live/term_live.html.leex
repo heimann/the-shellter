@@ -1,7 +1,15 @@
+<div id="terminal" class="term-container" phx-hook="Terminal">
+  
+</div>
+<%= if false do %>
+<div>
 You are logged in.
+
 
               <%= link(
                 "Log Out",
                 to: Routes.session_path(@socket, :delete),
                 method: :delete
               ) %>
+</div>
+<% end %>

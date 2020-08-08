@@ -33,7 +33,7 @@ defmodule TheshellterWeb.Router do
     pipe_through [:browser, :guardian, :browser_auth]
 
     live "/h4ck", TermLive
-    delete "/logout", SessionController, :delete
+    get "/logout", SessionController, :delete
   end
 
   scope "/auth", TheshellterWeb do

@@ -1,10 +1,12 @@
-<div class="log-in">
-  <h1>Welcome to The Shellter</h1>
-  <p>Log in with
-  <%= link(
-    "Github",
-    to: Routes.auth_path(@socket, :request, "github"),
-    class: "login-button"
-  ) %>
-  </p>
+<div class="container">
+  <div class="log-in">
+    <h1>Welcome to The Shellter</h1>
+    <p>Log in with
+      <%= link(
+        "Github",
+        to: Routes.auth_path(@socket, :request, "github"),
+        class: "login-button"
+      ) %>
+    </p>
+  </div>
 </div>

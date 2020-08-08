@@ -2,6 +2,8 @@
 @import "./phoenix.css";
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap');
 @import "../node_modules/nprogress/nprogress.css";
+@import "../node_modules/xterm/css/xterm.css";
+
 
 body {
   font-family: 'Source Code Pro', monospace;
@@ -14,6 +16,14 @@ body {
 
 .log-in {
   margin-top: 20%;
+}
+
+.term-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .login-button {
