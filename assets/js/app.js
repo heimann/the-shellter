@@ -58,26 +58,19 @@ Hooks.Terminal = {
 
     let curr_line = '';
 
+    this.handleEvent("message", ({message}) => {
+      term.write(message);
+    })
+
     term.onKey(event => {
       const ev = event.domEvent;
       const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
-
       if (ev.keyCode === 13) {
-        console.log(curr_line);
-        if (curr_line === 'logout') {
-          lv.pushEvent("logout", "");
-        }
-        term.prompt();
-        curr_line = '';
-      } else if (ev.keyCode === 8) {
-     // Do not delete the prompt
-      if (term._core.buffer.x > 2) {
-        term.write('\b \b');
+        console.log("carriage return");
+        lv.pushEvent("send_keystroke", "\x0d");
+      } else {
+        lv.pushEvent("send_keystroke", ev.key);
       }
-    } else if (printable) {
-      curr_line += event.key;
-      term.write(event.key);
-    }
     })
 
   }

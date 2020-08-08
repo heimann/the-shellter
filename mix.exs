@@ -37,11 +37,11 @@ defmodule Theshellter.MixProject do
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.13.0"},
+      {:phoenix_live_view, "~> 0.14.4"},
       {:floki, ">= 0.0.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.2"},
+      {:phoenix_live_dashboard, "~> 0.2.7"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
@@ -51,7 +51,8 @@ defmodule Theshellter.MixProject do
       {:ueberauth_github, "~> 0.8.0"},
       {:guardian, "~> 2.1"},
       {:edeliver, "~> 1.8.0"},
-      {:distillery, "~> 2.1.1"}
+      {:distillery, "~> 2.1.1"},
+      {:websockex, "~> 0.4.2"}
     ]
   end
 
