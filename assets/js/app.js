@@ -37,9 +37,25 @@ Hooks.Terminal = {
       term.write('\r\n$ ');
     };
 
-    term.writeln('Welcome to The Shellter');
     term.writeln('');
-    term.prompt();
+
+    function writeDelayed(term, text, delay) {
+      setTimeout(function() {term.writeln(text)}, delay);
+    }
+    writeDelayed(term, ' ▄▄▄▄▄▄▄ ▄▄   ▄▄ ▄▄▄▄▄▄▄    ▄▄▄▄▄▄▄ ▄▄   ▄▄ ▄▄▄▄▄▄▄ ▄▄▄     ▄▄▄     ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄   ', 50)
+    writeDelayed(term, '█       █  █ █  █       █  █       █  █ █  █       █   █   █   █   █       █       █   ▄  █  ', 100)
+    writeDelayed(term, '█▄     ▄█  █▄█  █    ▄▄▄█  █  ▄▄▄▄▄█  █▄█  █    ▄▄▄█   █   █   █   █▄     ▄█    ▄▄▄█  █ █ █  ', 150)
+    writeDelayed(term, '  █   █ █       █   █▄▄▄   █ █▄▄▄▄▄█       █   █▄▄▄█   █   █   █     █   █ █   █▄▄▄█   █▄▄█▄ ', 200)
+    writeDelayed(term, '  █   █ █   ▄   █    ▄▄▄█  █▄▄▄▄▄  █   ▄   █    ▄▄▄█   █▄▄▄█   █▄▄▄  █   █ █    ▄▄▄█    ▄▄  █', 250)
+    writeDelayed(term, '  █   █ █  █ █  █   █▄▄▄    ▄▄▄▄▄█ █  █ █  █   █▄▄▄█       █       █ █   █ █   █▄▄▄█   █  █ █', 300)
+    writeDelayed(term, '  █▄▄▄█ █▄▄█ █▄▄█▄▄▄▄▄▄▄█  █▄▄▄▄▄▄▄█▄▄█ █▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█ █▄▄▄█ █▄▄▄▄▄▄▄█▄▄▄█  █▄█', 350)
+
+    setTimeout(function() {
+      term.prompt();
+      term.focus();
+    }, 400)
+
+
     let curr_line = '';
 
     term.onKey(event => {
@@ -63,7 +79,6 @@ Hooks.Terminal = {
       term.write(event.key);
     }
     })
-    term.focus();
 
   }
 }
