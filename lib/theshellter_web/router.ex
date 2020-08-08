@@ -11,6 +11,14 @@ defmodule TheshellterWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :guardian do
+    plug TheshellterWeb.Authentication.Pipeline
+  end
+
+  pipeline :browser_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -19,6 +27,13 @@ defmodule TheshellterWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+  end
+
+  scope "/", TheshellterWeb do
+    pipe_through [:browser, :guardian, :browser_auth]
+
+    live "/h4ck", TermLive
+    delete "/logout", SessionController, :delete
   end
 
   scope "/auth", TheshellterWeb do

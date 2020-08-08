@@ -1,8 +1,10 @@
-<div class="social-log-in">
-  <p>Log in with</p>
+<div class="log-in">
+  <h1>Welcome to The Shellter</h1>
+  <p>Log in with
   <%= link(
     "Github",
     to: Routes.auth_path(@socket, :request, "github"),
-    class: "button button-outline"
+    class: "login-button"
   ) %>
+  </p>
 </div>

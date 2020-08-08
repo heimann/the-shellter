@@ -1,0 +1,7 @@
+You are logged in.
+
+              <%= link(
+                "Log Out",
+                to: Routes.session_path(@socket, :delete),
+                method: :delete
+              ) %>

@@ -1,4 +1,4 @@
-defmodule Theshellter.Authentication.Pipeline do
+defmodule TheshellterWeb.Authentication.Pipeline do
   use Guardian.Plug.Pipeline,
     otp_app: :theshellter,
     error_handler: TheshellterWeb.Authentication.ErrorHandler,

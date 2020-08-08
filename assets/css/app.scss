@@ -1,6 +1,33 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap');
 @import "../node_modules/nprogress/nprogress.css";
+
+body {
+  font-family: 'Source Code Pro', monospace;
+  background-color: black;
+}
+
+.main-section {
+  color: white;
+}
+
+.log-in {
+  margin-top: 20%;
+}
+
+.login-button {
+  box-sizing: border-box;
+  display: inline-block;
+  color: white;
+  padding: 6px;
+  border-radius: 1;
+  border: 1px solid white;
+  &:hover {
+    background: white;
+    color: black;
+  }
+}
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,

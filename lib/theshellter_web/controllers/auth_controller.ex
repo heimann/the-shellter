@@ -16,7 +16,7 @@ defmodule TheshellterWeb.AuthController do
       {:ok, account} ->
         conn
         |> Authentication.log_in(account)
-        |> redirect(to: Routes.page_path(conn, :index))
+        |> redirect(to: Routes.live_path(conn, TheshellterWeb.TermLive))
 
       {:error, _error_changeset} ->
         conn
@@ -25,7 +25,7 @@ defmodule TheshellterWeb.AuthController do
     end
   end
 
-  def callback(%{assigns: %{ueberauth_auth: _}} = conn, _params) do
+  def callback(%{assigns: %{ueberauth_failure: _}} = conn, _params) do
     conn
     |> put_flash(:error, "Authentication failed.")
     |> redirect(to: Routes.page_path(conn, :index))
