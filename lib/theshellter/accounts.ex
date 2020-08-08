@@ -1,12 +1,13 @@
 defmodule Theshellter.Accounts do
   alias Theshellter.Repo
   alias __MODULE__.Account
+  require Logger
 
-  def get_or_register(%Ueberauth.Auth{info: %{email: email}} = params) do
+  def get_or_register(%Ueberauth.Auth{info: %{email: email}} = _params) do
     if account = get_by_email(email) do
       {:ok, account}
     else
-      register(params)
+      {:error, :not_invited}
     end
   end
 
