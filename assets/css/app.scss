@@ -25,6 +25,18 @@ body {
   width: 100%;
 }
 
+.connected-container {
+  background-color: white;
+  color: black;
+  padding: 8px;
+}
+
+.connect-home {
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 800;
+}
+
 .user-list {
   list-style: none;
 }

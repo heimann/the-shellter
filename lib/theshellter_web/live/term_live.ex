@@ -85,16 +85,21 @@ defmodule TheshellterWeb.TermLive do
   @impl true
   def handle_event(
         "switch_term",
-        %{"target" => target},
+        %{"target" => target, "nickname" => nickname},
         %{assigns: %{container: container}} = socket
       ) do
     PubSub.unsubscribe(Theshellter.PubSub, container)
 
-    [{_id, pid}] = :ets.lookup(:listeners, container)
+    case :ets.lookup(:listeners, socket.assigns.container) do
+      [{_id, pid}] ->
+        if pid == socket.assigns.client do
+          Logger.debug("Listening client should be closed.")
+          :ets.delete(:listeners, socket.assigns.container)
+        else
+        end
 
-    if pid == socket.assigns.client do
-      Logger.debug("Listening client should be closed.")
-      :ets.delete(:listeners, socket.assigns.container)
+      _ ->
+        Logger.debug("No listening client")
     end
 
     PubSub.subscribe(Theshellter.PubSub, target)
@@ -102,7 +107,37 @@ defmodule TheshellterWeb.TermLive do
 
     {:noreply,
      socket
-     |> assign(container: target, client: client)}
+     |> assign(container: target, client: client, container_session: nickname)}
+  end
+
+  @impl true
+  def handle_event(
+        "disconnect_from_peer",
+        _params,
+        %{assigns: %{container: current_container, user: user}} = socket
+      ) do
+    PubSub.unsubscribe(Theshellter.PubSub, current_container)
+
+    case :ets.lookup(:listeners, socket.assigns.container) do
+      [{_id, pid}] ->
+        if pid == socket.assigns.client do
+          Logger.debug("Listening client should be closed.")
+          :ets.delete(:listeners, socket.assigns.container)
+        else
+        end
+
+      _ ->
+        Logger.debug("No listening client")
+    end
+
+    {:ok, container} = Theshellter.Environments.get_or_create_container(user.id)
+
+    PubSub.subscribe(Theshellter.PubSub, container.name)
+    {:ok, client} = Theshellter.WebsocketClient.start_link(container.name)
+
+    {:noreply,
+     socket
+     |> assign(container: container.name, client: client, container_session: user.nickname)}
   end
 
   @impl true
@@ -166,6 +201,7 @@ defmodule TheshellterWeb.TermLive do
          client: client,
          connected_users: connected_users,
          user: user,
+         container_session: user.nickname,
          waving_user: nil,
          container: container.name
        )}
@@ -175,6 +211,7 @@ defmodule TheshellterWeb.TermLive do
          user: user,
          client: nil,
          waving_user: nil,
+         container_session: user.nickname,
          connected_users: connected_users,
          container: container.name
        )}
