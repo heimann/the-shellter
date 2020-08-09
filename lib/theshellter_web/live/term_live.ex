@@ -59,9 +59,9 @@ defmodule TheshellterWeb.TermLive do
     if connected?(socket) do
       PubSub.subscribe(Theshellter.PubSub, container.name)
       {:ok, client} = Theshellter.WebsocketClient.start_link(container.name)
-      {:ok, assign(socket, client: client, container: container.name)}
+      {:ok, assign(socket, client: client, user: user, container: container.name)}
     else
-      {:ok, assign(socket, client: nil, container: container.name)}
+      {:ok, assign(socket, user: user, client: nil, container: container.name)}
     end
   end
 end

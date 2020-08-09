@@ -1,15 +1,21 @@
-<div phx-update="ignore" id="terminal" class="term-container" phx-hook="Terminal">
-  
-</div>
-<%= if false do %>
-<div>
-You are logged in.
+<div class="wrapper-main">
+  <div phx-update="ignore" id="terminal" class="term-container" phx-hook="Terminal">
 
-
-              <%= link(
-                "Log Out",
-                to: Routes.session_path(@socket, :delete),
-                method: :delete
-              ) %>
+  </div>
+  <div class="peer-list">
+    <div>
+      Signed in as <%= @user.nickname %>
+    </div>
+    <%= link(
+      "Log Out",
+      to: Routes.session_path(@socket, :delete),
+      method: :delete
+    ) %>
+    <br/>
+    <br />
+    No Peers Online
+    <br />
+    - - - - - - - -
+  </div>
+  </div>
 </div>
-<% end %>

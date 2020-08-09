@@ -34,6 +34,7 @@ defmodule TheshellterWeb.Router do
 
     live "/h4ck", TermLive
     get "/logout", SessionController, :delete
+    delete "/logout", SessionController, :delete
   end
 
   scope "/auth", TheshellterWeb do

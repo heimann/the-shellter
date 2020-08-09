@@ -19,11 +19,33 @@ body {
   margin-top: 20%;
 }
 
-.term-container {
-  position: fixed;
-  top: 0;
-  bottom: 0;
+.wrapper-main {
+  display: flex;
+  height: 100vh;
   width: 100%;
+}
+
+.xterm-viewport {
+  overflow-y: hidden !important;
+}
+
+a {
+  color: #7fdbff;
+}
+
+a:hover {
+  color: #7fdbff;
+  text-decoration: underline;
+}
+
+.peer-list {
+  flex: 1;
+  height: 100%;
+}
+
+
+.term-container {
+  flex: 6;
   height: 100%;
 }
 
