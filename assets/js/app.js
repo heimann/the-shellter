@@ -69,14 +69,35 @@ Hooks.Terminal = {
       if (ev.keyCode === 13) {
         // Enter
         lv.pushEvent("send_keystroke", "\x0d");
+      } else if (ev.keyCode === 9) {
+        // Backspace
+        lv.pushEvent("send_keystroke", "\x09");
       } else if (ev.keyCode === 8) {
         // Backspace
         lv.pushEvent("send_keystroke", "\x08");
       } else if (ev.keyCode === 27){
         lv.pushEvent("send_keystroke", "\x1b");
+      } else if (ev.keyCode == 37) {
+        console.log("left arrow")
+        lv.pushEvent("send_keystroke", "\u001b[D");
+      } else if (ev.keyCode == 38) {
+        console.log("up arrow")
+        lv.pushEvent("send_keystroke", "\u001b[A");
+      } else if (ev.keyCode == 39) {
+        console.log("right arrow")
+        lv.pushEvent("send_keystroke", "\u001b[C");
+      } else if (ev.keyCode == 40) {
+        console.log("down arrow")
+        lv.pushEvent("send_keystroke", "\u001b[B");
       } else if (ev.key == 'c' && ev.ctrlKey) {
         console.log("ctrl c")
         lv.pushEvent("send_keystroke", "\x03");
+      } else if (ev.key == 'a' && ev.ctrlKey) {
+        console.log("ctrl a")
+        lv.pushEvent("send_keystroke", "\x01");
+      } else if (ev.key == 'd' && ev.ctrlKey) {
+        console.log("ctrl d")
+        lv.pushEvent("send_keystroke", "\x04");
       } else {
         lv.pushEvent("send_keystroke", ev.key);
       }
