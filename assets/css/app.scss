@@ -1,12 +1,13 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap');
+@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@4/distr/fira_code.css);
 @import "../node_modules/nprogress/nprogress.css";
 @import "../node_modules/xterm/css/xterm.css";
 
 
 body {
-  font-family: 'Source Code Pro', monospace;
+  font-family: 'Fira Code', monospace;
+  font-variant-ligatures: contextual;
   background-color: black;
 }
 
