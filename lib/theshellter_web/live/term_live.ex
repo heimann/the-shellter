@@ -28,6 +28,21 @@ defmodule TheshellterWeb.TermLive do
   end
 
   @impl true
+  def handle_info({:joined, nickname}, socket) do
+    {:noreply, assign(socket, observers: [nickname | socket.assigns.observers])}
+  end
+
+  @impl true
+  def handle_info({:left, nickname}, socket) do
+    {:noreply,
+     assign(socket,
+       observers:
+         socket.assigns.observers
+         |> Enum.reject(&(&1 == nickname))
+     )}
+  end
+
+  @impl true
   def handle_info(
         %{event: "presence_diff", payload: %{joins: joins, leaves: leaves}},
         socket
@@ -88,6 +103,12 @@ defmodule TheshellterWeb.TermLive do
         %{"target" => target, "nickname" => nickname},
         %{assigns: %{container: container}} = socket
       ) do
+    PubSub.broadcast!(
+      Theshellter.PubSub,
+      container,
+      {:left, socket.assigns.user.nickname}
+    )
+
     PubSub.unsubscribe(Theshellter.PubSub, container)
 
     case :ets.lookup(:listeners, socket.assigns.container) do
@@ -104,6 +125,10 @@ defmodule TheshellterWeb.TermLive do
     PubSub.subscribe(Theshellter.PubSub, target)
     {:ok, client} = Theshellter.WebsocketClient.start_link(target)
 
+    Logger.debug("#{socket.assigns.user.nickname} connecting to #{nickname}")
+
+    PubSub.broadcast!(Theshellter.PubSub, target, {:joined, socket.assigns.user.nickname})
+
     {:noreply,
      socket
      |> assign(container: target, client: client, container_session: nickname)}
@@ -115,6 +140,12 @@ defmodule TheshellterWeb.TermLive do
         _params,
         %{assigns: %{container: current_container, user: user}} = socket
       ) do
+    PubSub.broadcast!(
+      Theshellter.PubSub,
+      current_container,
+      {:left, socket.assigns.user.nickname}
+    )
+
     PubSub.unsubscribe(Theshellter.PubSub, current_container)
 
     case :ets.lookup(:listeners, socket.assigns.container) do
@@ -191,6 +222,7 @@ defmodule TheshellterWeb.TermLive do
         user.id,
         %{
           nickname: user.nickname,
+          connected_to: user.nickname,
           container: container.name
         }
       )
@@ -201,6 +233,7 @@ defmodule TheshellterWeb.TermLive do
          connected_users: connected_users,
          user: user,
          container_session: user.nickname,
+         observers: [],
          waving_user: nil,
          container: container.name
        )}
@@ -211,6 +244,7 @@ defmodule TheshellterWeb.TermLive do
          client: nil,
          waving_user: nil,
          container_session: user.nickname,
+         observers: [],
          connected_users: connected_users,
          container: container.name
        )}

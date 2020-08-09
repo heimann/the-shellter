@@ -34,6 +34,10 @@
       <% else %>
         <span id="<%= cu.nickname %>-switch" phx-hook="clearTermOnClick" phx-click="switch_term" phx-value-nickname="<%= cu.nickname %>" phx-value-target="<%= cu.container %>" class="active-user-link"><%= cu.nickname %></span>
         <span class="wave" phx-click="ping_user" phx-value-target="<%= cu.container %>">👋</span>
+        <%= if cu.nickname in @observers do %>
+          <br/>
+          > is connected to you
+        <% end %>
       <% end %>
       </li>
     <% end %>
