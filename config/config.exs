@@ -30,7 +30,8 @@ config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
   providers: [
-    github: {Ueberauth.Strategy.Github, [default_scope: "user,public_repo"]}
+    github:
+      {Ueberauth.Strategy.Github, [default_scope: "user,public_repo", send_redirect_uri: false]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
