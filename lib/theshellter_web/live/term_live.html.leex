@@ -18,11 +18,17 @@
     - - - - - - - -
     <ul class="user-list">
     <%= for cu <- @connected_users do %>
-      <li><%= cu.nickname %> <%= if cu.nickname == @user.nickname  do %>
-          (you)
-      <% end %></li>
+      <li>
+      <%= if cu.nickname == @user.nickname  do %>
+        <%= cu.nickname %>
+        (you)
+      <% else %>
+        <%= cu.nickname %>
+        <span class="active-user-link" phx-click="ping-user" phx-value-target="<%= cu.container %>">👋</span>
+      <% end %>
+      </li>
     <% end %>
     </ul>
-  </div>
+    - - - - - - - -
   </div>
 </div>

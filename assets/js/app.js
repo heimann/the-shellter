@@ -24,6 +24,7 @@ let Hooks = {}
 
 Hooks.Terminal = {
   mounted() {
+    console.log("Mounting terminal");
     let term = new Terminal({
       cursorBlink: true,
     });
@@ -96,6 +97,7 @@ Hooks.Terminal = {
 
   }
 }
+
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})

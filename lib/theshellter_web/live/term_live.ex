@@ -13,6 +13,19 @@ defmodule TheshellterWeb.TermLive do
      |> Phoenix.LiveView.push_event("message", %{message: message})}
   end
 
+  def handle_info("clear_flash", socket) do
+    {:noreply, clear_flash(socket)}
+  end
+
+  @impl true
+  def handle_info(%{waves: user}, socket) do
+    Process.send_after(self(), "clear_flash", 3000)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, "#{user} 👋")}
+  end
+
   @impl true
   def handle_info(
         %{event: "presence_diff", payload: %{joins: joins, leaves: leaves}},
@@ -39,6 +52,16 @@ defmodule TheshellterWeb.TermLive do
        to: Routes.session_path(socket, :delete),
        method: :delete
      )}
+  end
+
+  @impl true
+  def handle_event(
+        "ping-user",
+        %{"target" => target} = _params,
+        %{assigns: %{user: user}} = socket
+      ) do
+    Phoenix.PubSub.broadcast(Theshellter.PubSub, target, %{waves: user.nickname})
+    {:noreply, socket}
   end
 
   @impl true
@@ -101,6 +124,7 @@ defmodule TheshellterWeb.TermLive do
          client: client,
          connected_users: connected_users,
          user: user,
+         waving_user: nil,
          container: container.name
        )}
     else
@@ -108,6 +132,7 @@ defmodule TheshellterWeb.TermLive do
        assign(socket,
          user: user,
          client: nil,
+         waving_user: nil,
          connected_users: connected_users,
          container: container.name
        )}

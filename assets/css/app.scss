@@ -29,6 +29,11 @@ body {
   list-style: none;
 }
 
+.active-user-link {
+  color: #7fdbff;
+  cursor: pointer;
+}
+
 .xterm-viewport {
   overflow-y: hidden !important;
 }
