@@ -31,6 +31,21 @@ Hooks.clearTermOnClick = {
   }
 }
 
+Hooks.wave = {
+  mounted() {
+    console.log("Mounted wave")
+    let el = this.el;
+    this.el.onclick = () => {
+      console.log("Clicked wave")
+      el.classList.add('clicked');
+      setTimeout(function() {
+        el.classList.remove('clicked');
+      }, 500);
+    }
+  }
+
+}
+
 Hooks.Terminal = {
   mounted() {
     console.log("Mounting terminal");

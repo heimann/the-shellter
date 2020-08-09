@@ -43,6 +43,13 @@ body {
 
 .wave {
   cursor: pointer;
+  font-size: 16px;
+  transition: font-size 0.2s;
+}
+
+.wave.clicked {
+  font-size: 20px;
+  transition: font-size 0.2s;
 }
 
 .active-user-link {
