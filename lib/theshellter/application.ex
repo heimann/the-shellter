@@ -14,10 +14,9 @@ defmodule Theshellter.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Theshellter.PubSub},
       # Start the Endpoint (http/https)
-      TheshellterWeb.Endpoint,
+      TheshellterWeb.Endpoint
       # Start a worker by calling: Theshellter.Worker.start_link(arg)
       # {Theshellter.Worker, arg}
-      Theshellter.WebsocketClient
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -5,7 +5,7 @@ defmodule Theshellter.WebsocketClient do
 
   def start_link(state) do
     WebSockex.start_link(
-      "ws://localhost:2376/containers/ed8e2eeddda4/attach/ws?stream=1",
+      "ws://localhost:2376/containers/#{state}/attach/ws?stream=1",
       __MODULE__,
       state
     )
@@ -18,7 +18,7 @@ defmodule Theshellter.WebsocketClient do
 
   def send(client, message) do
     Logger.info("Sending message: #{message}")
-    WebSockex.send_frame(client, {:text, message})
+    WebSockex.send_frame(client, {:text, IO.chardata_to_string(message)})
   end
 
   def handle_frame({:binary, _msg}, []) do
@@ -26,8 +26,6 @@ defmodule Theshellter.WebsocketClient do
   end
 
   def handle_frame({:binary, msg}, state) do
-    Logger.info("Received Message: #{msg}, state: #{state}")
-
     Logger.info("state is not empty")
     Phoenix.PubSub.broadcast(Theshellter.PubSub, state, %{message: msg})
     {:ok, state}

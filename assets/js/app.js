@@ -31,7 +31,6 @@ Hooks.Terminal = {
     const fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
     term.open(this.el);
-    fitAddon.fit();
 
     term.prompt = () => {
       term.write('\r\n$ ');
@@ -59,19 +58,34 @@ Hooks.Terminal = {
     let curr_line = '';
 
     this.handleEvent("message", ({message}) => {
-      term.write(message);
+      term.write(atob(message));
     })
+
 
     term.onKey(event => {
       const ev = event.domEvent;
       const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
+      console.log(ev.keyCode)
       if (ev.keyCode === 13) {
-        console.log("carriage return");
+        // Enter
         lv.pushEvent("send_keystroke", "\x0d");
+      } else if (ev.keyCode === 8) {
+        // Backspace
+        lv.pushEvent("send_keystroke", "\x08");
+      } else if (ev.keyCode === 27){
+        lv.pushEvent("send_keystroke", "\x1b");
+      } else if (ev.key == 'c' && ev.ctrlKey) {
+        console.log("ctrl c")
+        lv.pushEvent("send_keystroke", "\x03");
       } else {
         lv.pushEvent("send_keystroke", ev.key);
       }
     })
+    fitAddon.fit();
+    lv.pushEvent("set_dimensions", {height: term.rows, width: term.cols});
+
+
+    window.term = term;
 
   }
 }

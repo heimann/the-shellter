@@ -16,6 +16,10 @@ defmodule TheshellterWeb.Authentication do
     end
   end
 
+  def get_current_account(conn) do
+    __MODULE__.Plug.current_resource(conn)
+  end
+
   def log_in(conn, account) do
     __MODULE__.Plug.sign_in(conn, account)
   end

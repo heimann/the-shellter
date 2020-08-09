@@ -52,7 +52,9 @@ defmodule Theshellter.MixProject do
       {:guardian, "~> 2.1"},
       {:edeliver, "~> 1.8.0"},
       {:distillery, "~> 2.1.1"},
-      {:websockex, "~> 0.4.2"}
+      {:websockex, "~> 0.4.2"},
+      {:poison, "~> 4.0.1"},
+      {:httpoison, "~> 1.6"}
     ]
   end
 
