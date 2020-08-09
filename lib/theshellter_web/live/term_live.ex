@@ -4,15 +4,31 @@ defmodule TheshellterWeb.TermLive do
   alias Phoenix.PubSub
   require Logger
 
-  alias Theshellter.Environments
-
   @impl true
-  def handle_info(%{message: message} = params, socket) do
+  def handle_info(%{message: message} = _params, socket) do
     message = Base.encode64(message)
 
     {:noreply,
      socket
      |> Phoenix.LiveView.push_event("message", %{message: message})}
+  end
+
+  @impl true
+  def handle_info(
+        %{event: "presence_diff", payload: %{joins: joins, leaves: leaves}},
+        socket
+      ) do
+    connected_users =
+      TheshellterWeb.Presence.list("term")
+      |> Enum.map(fn {_user_id, data} ->
+        data[:metas]
+        |> List.first()
+      end)
+
+    Logger.debug("joins:: #{inspect(joins)}")
+    Logger.debug("leaves:: #{inspect(leaves)}")
+
+    {:noreply, assign(socket, connected_users: connected_users)}
   end
 
   @impl true
@@ -25,6 +41,7 @@ defmodule TheshellterWeb.TermLive do
      )}
   end
 
+  @impl true
   def handle_event("send_keystroke", params, socket) do
     Logger.debug("params:: #{inspect(params)}")
     Theshellter.WebsocketClient.send(socket.assigns.client, params)
@@ -56,12 +73,44 @@ defmodule TheshellterWeb.TermLive do
 
     Logger.debug("params:: #{inspect(params)}")
 
+    connected_users =
+      TheshellterWeb.Presence.list("term")
+      |> Enum.map(fn {_user_id, data} ->
+        data[:metas]
+        |> List.first()
+      end)
+
     if connected?(socket) do
       PubSub.subscribe(Theshellter.PubSub, container.name)
       {:ok, client} = Theshellter.WebsocketClient.start_link(container.name)
-      {:ok, assign(socket, client: client, user: user, container: container.name)}
+
+      TheshellterWeb.Endpoint.subscribe("term")
+
+      TheshellterWeb.Presence.track(
+        self(),
+        "term",
+        user.id,
+        %{
+          nickname: user.nickname,
+          container: container.name
+        }
+      )
+
+      {:ok,
+       assign(socket,
+         client: client,
+         connected_users: connected_users,
+         user: user,
+         container: container.name
+       )}
     else
-      {:ok, assign(socket, user: user, client: nil, container: container.name)}
+      {:ok,
+       assign(socket,
+         user: user,
+         client: nil,
+         connected_users: connected_users,
+         container: container.name
+       )}
     end
   end
 end

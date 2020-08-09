@@ -13,6 +13,8 @@ defmodule Theshellter.Application do
       TheshellterWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Theshellter.PubSub},
+      # Add Presence
+      TheshellterWeb.Presence,
       # Start the Endpoint (http/https)
       TheshellterWeb.Endpoint
       # Start a worker by calling: Theshellter.Worker.start_link(arg)

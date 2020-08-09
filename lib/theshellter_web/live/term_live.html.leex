@@ -13,9 +13,16 @@
     ) %>
     <br/>
     <br />
-    No Peers Online
+    Online:
     <br />
     - - - - - - - -
+    <ul class="user-list">
+    <%= for cu <- @connected_users do %>
+      <li><%= cu.nickname %> <%= if cu.nickname == @user.nickname  do %>
+          (you)
+      <% end %></li>
+    <% end %>
+    </ul>
   </div>
   </div>
 </div>
