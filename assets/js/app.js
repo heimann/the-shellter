@@ -85,6 +85,13 @@ Hooks.Terminal = {
     lv.pushEvent("set_dimensions", {height: term.rows, width: term.cols});
 
 
+    window.onresize = () => {
+    fitAddon.fit();
+      console.log("Detected resize");
+      lv.pushEvent("set_dimensions", {height: term.rows, width: term.cols});
+    }
+
+
     window.term = term;
 
   }
