@@ -22,8 +22,33 @@ import { FitAddon } from 'xterm-addon-fit';
 
 let Hooks = {}
 
+Hooks.clearTermOnClick = {
+  mounted() {
+    this.el.onclick = () => {window.term.clear()};
+  },
+  updated() {
+    this.el.onclick = () => {window.term.clear()};
+  }
+}
+
+Hooks.wave = {
+  mounted() {
+    console.log("Mounted wave")
+    let el = this.el;
+    this.el.onclick = () => {
+      console.log("Clicked wave")
+      el.classList.add('clicked');
+      setTimeout(function() {
+        el.classList.remove('clicked');
+      }, 500);
+    }
+  }
+
+}
+
 Hooks.Terminal = {
   mounted() {
+    console.log("Mounting terminal");
     let term = new Terminal({
       cursorBlink: true,
     });
@@ -112,11 +137,17 @@ Hooks.Terminal = {
       lv.pushEvent("set_dimensions", {height: term.rows, width: term.cols});
     }
 
+    window.addEventListener('beforeunload', function(e) {
+      lv.pushEvent("unmounted", {"state": true});
+    })
+
 
     window.term = term;
 
   }
+  
 }
+
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})

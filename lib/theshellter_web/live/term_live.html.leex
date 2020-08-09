@@ -3,26 +3,45 @@
 
   </div>
   <div class="peer-list">
-    <div>
-      Signed in as <%= @user.nickname %>
-    </div>
+    <%= if @container_session != @user.nickname do %>
+      <div class="connected-container">
+        Connected to: <%= @container_session %>
+        <span id="connect-to-self" phx-hook="clearTermOnClick" phx-click="disconnect_from_peer" class="connect-home">Disconnect</span>
+      </div>
+    <% end %>
+    <br />
     <%= link(
       "Log Out",
       to: Routes.session_path(@socket, :delete),
       method: :delete
     ) %>
     <br/>
+
+    <div>
+      Signed in as <%= @user.nickname %>
+    </div>
+
     <br />
     Online:
     <br />
     - - - - - - - -
     <ul class="user-list">
     <%= for cu <- @connected_users do %>
-      <li><%= cu.nickname %> <%= if cu.nickname == @user.nickname  do %>
-          (you)
-      <% end %></li>
+      <li>
+      <%= if cu.nickname == @user.nickname  do %>
+        <%= cu.nickname %>
+        (you)
+      <% else %>
+        <span id="<%= cu.nickname %>-switch" phx-hook="clearTermOnClick" phx-click="switch_term" phx-value-nickname="<%= cu.nickname %>" phx-value-target="<%= cu.container %>" class="active-user-link"><%= cu.nickname %></span>
+        <span id="<%= cu.nickname %>-wave" phx-hook="wave" class="wave" phx-click="ping_user" phx-value-target="<%= cu.container %>">👋</span>
+        <%= if cu.nickname in @observers do %>
+          <br/>
+          > is connected to you
+        <% end %>
+      <% end %>
+      </li>
     <% end %>
     </ul>
-  </div>
+    - - - - - - - -
   </div>
 </div>

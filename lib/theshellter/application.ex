@@ -23,6 +23,7 @@ defmodule Theshellter.Application do
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
+    :ets.new(:listeners, [:set, :public, :named_table])
     opts = [strategy: :one_for_one, name: Theshellter.Supervisor]
     Supervisor.start_link(children, opts)
   end

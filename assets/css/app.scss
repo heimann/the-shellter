@@ -25,8 +25,35 @@ body {
   width: 100%;
 }
 
+.connected-container {
+  background-color: white;
+  color: black;
+  padding: 8px;
+}
+
+.connect-home {
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 800;
+}
+
 .user-list {
   list-style: none;
+}
+
+.wave {
+  cursor: pointer;
+  font-size: 16px;
+  transition: font-size 0.2s;
+}
+.wave.clicked {
+  font-size: 20px;
+  transition: font-size 0.2s;
+}
+
+.active-user-link {
+  color: #7fdbff;
+  cursor: pointer;
 }
 
 .xterm-viewport {
@@ -124,13 +151,12 @@ a:hover {
 .alert {
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid transparent;
+  border: 1px solid white;
   border-radius: 4px;
 }
 .alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+  color: black;
+  background-color: white;
 }
 .alert-warning {
   color: #8a6d3b;
