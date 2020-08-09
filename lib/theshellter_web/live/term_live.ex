@@ -95,7 +95,6 @@ defmodule TheshellterWeb.TermLive do
         if pid == socket.assigns.client do
           Logger.debug("Listening client should be closed.")
           :ets.delete(:listeners, socket.assigns.container)
-        else
         end
 
       _ ->

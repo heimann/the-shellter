@@ -22,6 +22,15 @@ import { FitAddon } from 'xterm-addon-fit';
 
 let Hooks = {}
 
+Hooks.clearTermOnClick = {
+  mounted() {
+    this.el.onclick = window.term.clear();
+  },
+  updated() {
+    this.el.onclick = window.term.clear();
+  }
+}
+
 Hooks.Terminal = {
   mounted() {
     console.log("Mounting terminal");

@@ -6,7 +6,7 @@
     <%= if @container_session != @user.nickname do %>
       <div class="connected-container">
         Connected to: <%= @container_session %>
-        <span phx-click="disconnect_from_peer" class="connect-home">Disconnect</span>
+        <span id="connect-to-self" phx-hook="clearTermOnClick" phx-click="disconnect_from_peer" class="connect-home">Disconnect</span>
       </div>
     <% end %>
     <br />
@@ -32,7 +32,7 @@
         <%= cu.nickname %>
         (you)
       <% else %>
-        <span phx-click="switch_term" phx-value-nickname="<%= cu.nickname %>" phx-value-target="<%= cu.container %>" class="active-user-link"><%= cu.nickname %></span>
+        <span id="<%= cu.nickname %>-switch" phx-hook="clearTermOnClick" phx-click="switch_term" phx-value-nickname="<%= cu.nickname %>" phx-value-target="<%= cu.container %>" class="active-user-link"><%= cu.nickname %></span>
         <span class="wave" phx-click="ping_user" phx-value-target="<%= cu.container %>">👋</span>
       <% end %>
       </li>
