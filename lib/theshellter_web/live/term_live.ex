@@ -20,6 +20,7 @@ defmodule TheshellterWeb.TermLive do
   @impl true
   def handle_info(%{waves: user}, socket) do
     Process.send_after(self(), "clear_flash", 3000)
+    Logger.debug("User waves!")
 
     {:noreply,
      socket
@@ -56,12 +57,52 @@ defmodule TheshellterWeb.TermLive do
 
   @impl true
   def handle_event(
-        "ping-user",
+        "ping_user",
         %{"target" => target} = _params,
         %{assigns: %{user: user}} = socket
       ) do
     Phoenix.PubSub.broadcast(Theshellter.PubSub, target, %{waves: user.nickname})
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("unmounted", _params, socket) do
+    case :ets.lookup(:listeners, socket.assigns.container) do
+      [{_id, pid}] ->
+        if pid == socket.assigns.client do
+          Logger.debug("Listening client should be closed.")
+          :ets.delete(:listeners, socket.assigns.container)
+          {:noreply, socket}
+        else
+          {:noreply, socket}
+        end
+
+      [] ->
+        {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "switch_term",
+        %{"target" => target},
+        %{assigns: %{container: container}} = socket
+      ) do
+    PubSub.unsubscribe(Theshellter.PubSub, container)
+
+    [{_id, pid}] = :ets.lookup(:listeners, container)
+
+    if pid == socket.assigns.client do
+      Logger.debug("Listening client should be closed.")
+      :ets.delete(:listeners, socket.assigns.container)
+    end
+
+    PubSub.subscribe(Theshellter.PubSub, target)
+    {:ok, client} = Theshellter.WebsocketClient.start_link(target)
+
+    {:noreply,
+     socket
+     |> assign(container: target, client: client)}
   end
 
   @impl true
@@ -106,6 +147,7 @@ defmodule TheshellterWeb.TermLive do
     if connected?(socket) do
       PubSub.subscribe(Theshellter.PubSub, container.name)
       {:ok, client} = Theshellter.WebsocketClient.start_link(container.name)
+      Logger.debug("client:: #{inspect(client)}")
 
       TheshellterWeb.Endpoint.subscribe("term")
 

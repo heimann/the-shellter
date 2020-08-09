@@ -27,8 +27,20 @@ defmodule Theshellter.WebsocketClient do
 
   def handle_frame({:binary, msg}, state) do
     Logger.info("state is not empty")
-    Phoenix.PubSub.broadcast(Theshellter.PubSub, state, %{message: msg})
-    {:ok, state}
+
+    case :ets.lookup(:listeners, state) do
+      [] ->
+        :ets.insert(:listeners, {state, self()})
+        Phoenix.PubSub.broadcast(Theshellter.PubSub, state, %{message: msg})
+        {:ok, state}
+
+      [{_id, pid}] ->
+        if pid == self() do
+          Phoenix.PubSub.broadcast(Theshellter.PubSub, state, %{message: msg})
+        end
+
+        {:ok, state}
+    end
   end
 
   def handle_disconnect(%{reason: {:local, reason}}, state) do

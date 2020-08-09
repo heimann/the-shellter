@@ -92,10 +92,15 @@ Hooks.Terminal = {
       lv.pushEvent("set_dimensions", {height: term.rows, width: term.cols});
     }
 
+    window.addEventListener('beforeunload', function(e) {
+      lv.pushEvent("unmounted", {"state": true});
+    })
+
 
     window.term = term;
 
   }
+  
 }
 
 

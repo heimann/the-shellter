@@ -23,8 +23,8 @@
         <%= cu.nickname %>
         (you)
       <% else %>
-        <%= cu.nickname %>
-        <span class="active-user-link" phx-click="ping-user" phx-value-target="<%= cu.container %>">👋</span>
+        <span phx-click="switch_term" phx-value-target="<%= cu.container %>" class="active-user-link"><%= cu.nickname %></span>
+        <span class="wave" phx-click="ping_user" phx-value-target="<%= cu.container %>">👋</span>
       <% end %>
       </li>
     <% end %>
