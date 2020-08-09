@@ -4,6 +4,7 @@ defmodule Theshellter.Accounts.Account do
 
   schema "accounts" do
     field :email, :string
+    field :nickname, :string
 
     timestamps()
   end
@@ -18,8 +19,9 @@ defmodule Theshellter.Accounts.Account do
   @doc false
   def oauth_changeset(struct, params) do
     struct
-    |> cast(params, [:email])
-    |> validate_required([:email])
+    |> cast(params, [:email, :nickname])
+    |> validate_required([:email, :nickname])
     |> unique_constraint(:email)
+    |> unique_constraint(:nickname)
   end
 end
