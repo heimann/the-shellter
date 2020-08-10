@@ -39,7 +39,13 @@ defmodule Theshellter.WebsocketClient do
           Phoenix.PubSub.broadcast(Theshellter.PubSub, state, %{message: msg})
         end
 
-        {:ok, state}
+        if !Process.alive?(pid) do
+          :ets.insert(:listeners, {state, self()})
+          Phoenix.PubSub.broadcast(Theshellter.PubSub, state, %{message: msg})
+          {:ok, state}
+        else
+          {:ok, state}
+        end
     end
   end
 

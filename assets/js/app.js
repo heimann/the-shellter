@@ -17,7 +17,7 @@ import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 
-import { Terminal } from "xterm"; 
+import { Terminal } from "xterm";
 import { FitAddon } from 'xterm-addon-fit';
 
 let Hooks = {}
@@ -145,7 +145,7 @@ Hooks.Terminal = {
     window.term = term;
 
   }
-  
+
 }
 
 

@@ -84,7 +84,7 @@ defmodule TheshellterWeb.TermLive do
   def handle_event("unmounted", _params, socket) do
     case :ets.lookup(:listeners, socket.assigns.container) do
       [{_id, pid}] ->
-        if pid == socket.assigns.client do
+        if pid == socket.assigns.client or !Process.alive?(pid) do
           Logger.debug("Listening client should be closed.")
           :ets.delete(:listeners, socket.assigns.container)
           {:noreply, socket}
