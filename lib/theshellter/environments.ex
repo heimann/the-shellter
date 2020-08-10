@@ -24,7 +24,7 @@ defmodule Theshellter.Environments do
   end
 
   def spawn_container() do
-    container = System.cmd("docker", ["run", "-itd", "theshellter:base"])
+    container = System.cmd("docker", ["run", "-itd", "-u", "theshellter", "-w", "/home/theshellter", "theshellter:base", "/bin/zsh"])
     String.trim(elem(container, 0), "\n")
   end
 end

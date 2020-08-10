@@ -1,5 +1,4 @@
 # !/bin/bash
-st
 
 # Ensure user passed enough args
 if [ "$#" -ne 1 ]; then
@@ -21,33 +20,48 @@ fi
 #  exit 1
 #fi
 
+USERNAME="$1"
+HOME_DIR="/home/$USERNAME"
+ZSHRC="/$HOME_DIR/.zshrc"
+
 # Add new user and make default shell ZSH
-useradd -ms /bin/zsh $1
-usermod -aG sudo $1
-echo "$1" | passwd --stdin $1
-echo -e "$1\n$1" | passwd $1
+useradd -ms /bin/zsh $USERNAME
+usermod -aG sudo $USERNAME
+echo "$USERNAME" | passwd --stdin $USERNAME
+echo -e "$USERNAME\n$USERNAME" | passwd $USERNAME
 
-#wget https://starship.rs/install.sh
-#chmod +x install.sh
-#./install.sh -y
+touch $ZSHRC
+echo 'if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then' >> $ZSHRC
+echo '  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"' >> $ZSHRC
+echo 'fi' >> $ZSHRC
 
-touch /home/$1/.zshrc
-echo "source /home/$1/.config/antigen.zsh" >> /home/$1/.zshrc
-echo "" >> /home/$1/.zshrc
 echo "alias language='asdf'" >> /home/$1/.zshrc
 echo "alias search='so'" >> /home/$1/.zshrc
 echo "alias howto='tldr'" >> /home/$1/.zshrc
+
 echo "" >> /home/$1/.zshrc
-echo "antigen bundle agkozak/zsh-z" >> /home/$1/.zshrc
 echo '[[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh' >> /home/$1/.zshrc
 echo "" >> /home/$1/.zshrc
 echo ". /home/$1/.asdf/asdf.sh" >> /home/$1/.zshrc
-chown $1:$1 /home/$1/.zshrc
+echo ". $HOME_DIR/.config/zsh-z.plugin.zsh" >> $ZSHRC
+
+echo "" >> /home/$1/.zshrc
+
+echo "# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh." >> /home/$1/.zshrc
+echo ". /home/$1/.config/powerlevel10k/powerlevel10k.zsh-theme" >> /home/$1/.zshrc
+echo "[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh" >> $ZSHRC
+
+chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
+cp /tmp/.p10k.zsh $HOME_DIR
+chown $USERNAME:$USERNAME $HOME_DIR/.p10k.zsh
 
 # Switch to the new user
 sudo -u $1 -H zsh -c "cd /home/$1; curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | zsh"
+sudo -u $1 -H zsh -c "cd /home/$1; git clone --depth=1 https://github.com/romkatv/powerlevel10k.git .config/powerlevel10k"
 sudo -u $1 -H zsh -c "cd /home/$1; git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0-rc1"
-sudo -u $1 -H zsh -c "cd /home/$1; mkdir .config"
-sudo -u $1 -H zsh -c "cd /home/$1; curl -L git.io/antigen > .config/antigen.zsh"
+sudo -u $1 -H zsh -c "cd /home/$1; curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+sudo -u $1 -H zsh -c "cd /home/$1; git clone https://github.com/garabik/grc.git; sh grc/install.sh; rm -rf grc"
+sudo -u $1 -H zsh -c "cd /home/$1; wget -P .config/ https://raw.githubusercontent.com/agkozak/zsh-z/master/zsh-z.plugin.zsh"
+sudo -u $1 -H zsh -c "cd /home/$1; git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; cd .fzf; ./install --all"
 
-su - $1
+su - $USERNAME
