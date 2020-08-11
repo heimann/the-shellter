@@ -120,6 +120,9 @@ Hooks.Terminal = {
       } else if (ev.key == 'a' && ev.ctrlKey) {
         console.log("ctrl a")
         lv.pushEvent("send_keystroke", "\x01");
+      } else if (ev.key == 'b' && ev.ctrlKey) {
+        console.log("ctrl b")
+        lv.pushEvent("send_keystroke", "\x02");
       } else if (ev.key == 'd' && ev.ctrlKey) {
         console.log("ctrl d")
         lv.pushEvent("send_keystroke", "\x04");
