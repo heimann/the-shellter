@@ -33,5 +33,9 @@ npm-debug.log
 # this depending on your deployment strategy.
 /priv/static/
 
+# Ignore self signed certs for dev server
+# Be sure to run `mix phx.gen.cert`
+/priv/cert
+
 .env
 .deliver/releases/

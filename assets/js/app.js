@@ -86,7 +86,6 @@ Hooks.Terminal = {
       term.write(atob(message));
     })
 
-
     term.onKey(event => {
       const ev = event.domEvent;
       const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
@@ -126,6 +125,20 @@ Hooks.Terminal = {
       } else if (ev.key == 'd' && ev.ctrlKey) {
         console.log("ctrl d")
         lv.pushEvent("send_keystroke", "\x04");
+      } else if (ev.key == 'v' && ev.ctrlKey) {
+        console.log("ctrl v/paste")
+        navigator.clipboard.readText()
+          .then(text => {
+            for (var i = 0; i < text.length; i++)
+            {
+              lv.pushEvent("send_keystroke", text.charAt(i));
+            }
+            console.log('clipboard:', text)
+          })
+          .catch(err => {
+            console.log('Something went wrong', err);
+          })
+        //lv.pushEvent("send_keystroke", "\x04");
       } else {
         lv.pushEvent("send_keystroke", ev.key);
       }
