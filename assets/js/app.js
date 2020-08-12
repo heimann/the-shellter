@@ -125,6 +125,9 @@ Hooks.Terminal = {
       } else if (ev.key == 'd' && ev.ctrlKey) {
         console.log("ctrl d")
         lv.pushEvent("send_keystroke", "\x04");
+      } else if (ev.key == 'g' && ev.ctrlKey) {
+        console.log("ctrl g")
+        lv.pushEvent("send_keystroke", "\x07");
       } else if (ev.key == 'v' && ev.ctrlKey) {
         console.log("ctrl v/paste")
         navigator.clipboard.readText()
