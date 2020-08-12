@@ -47,6 +47,15 @@ Hooks.wave = {
   }
 
 }
+function webgl_support () { 
+   try {
+    var canvas = document.createElement('canvas'); 
+    return !!window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+   } catch(e) {
+     return false;
+   }
+ };
 
 Hooks.Terminal = {
   mounted() {
@@ -58,7 +67,9 @@ Hooks.Terminal = {
     const fitAddon = new FitAddon();
 
     term.open(this.el);
-    term.loadAddon(new WebglAddon());
+    if (webgl_support() === true) {
+      term.loadAddon(new WebglAddon());
+    }
     term.loadAddon(fitAddon);
 
     term.prompt = () => {
@@ -93,7 +104,6 @@ Hooks.Terminal = {
     term.onKey(event => {
       const ev = event.domEvent;
       const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
-      console.log(ev.keyCode)
       if (ev.keyCode === 13) {
         // Enter
         lv.pushEvent("send_keystroke", "\x0d");
