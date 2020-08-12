@@ -19,6 +19,8 @@ import {LiveSocket} from "phoenix_live_view"
 
 import { Terminal } from "xterm";
 import { FitAddon } from 'xterm-addon-fit';
+import { WebglAddon } from 'xterm-addon-webgl';
+
 
 let Hooks = {}
 
@@ -54,8 +56,10 @@ Hooks.Terminal = {
     });
     let lv = this;
     const fitAddon = new FitAddon();
-    term.loadAddon(fitAddon);
+
     term.open(this.el);
+    term.loadAddon(new WebglAddon());
+    term.loadAddon(fitAddon);
 
     term.prompt = () => {
       term.write('\r\n$ ');
